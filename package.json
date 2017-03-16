@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node_modules/.bin/webpack-dev-server",
-    "build": "node_modules/.bin/webpack --optimize-minimize"
+    "build": "node_modules/.bin/webpack --define process.env.NODE_ENV='\"production\"' --optimize-minimize"
   },
   "author": "Kevin Mann",
   "license": "MIT",
