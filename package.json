@@ -4,7 +4,7 @@
   "description": "Hacker news reader built with react",
   "main": "index.js",
   "scripts": {
-    "start": "node_modules/.bin/webpack-dev-server",
+    "start": "node_modules/.bin/webpack-dev-server --progress --inline --hot",
     "build": "node_modules/.bin/webpack --define process.env.NODE_ENV='\"production\"' --optimize-minimize"
   },
   "author": "Kevin Mann",
