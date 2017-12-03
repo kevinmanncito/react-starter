@@ -2,16 +2,45 @@ var webpack = require('webpack');
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
+var CleanWebpackPlugin = require('clean-webpack-plugin');
 
 var BUILD_DIR = path.resolve(__dirname, 'build');
 var APP_DIR = path.resolve(__dirname, 'src');
 
 var config = {
-  entry: APP_DIR + '/index.jsx',
+  entry: {
+    vendor: [
+      'react', 'react-dom', 'prop-types',
+    ],
+    main: path.resolve(APP_DIR, 'index.jsx'),
+    styles: path.resolve(APP_DIR, 'sass/css.js'),
+  },
   output: {
     path: BUILD_DIR,
-    filename: 'bundle.js'
+    filename: '[name].[hash].bundle.js'
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(APP_DIR, 'index.html')
+    }),
+    new ExtractTextPlugin({
+      filename: 'styles.[hash].css'
+    }),
+    new CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'vendor.[hash].js',
+    }),
+    new CleanWebpackPlugin([
+      BUILD_DIR,
+    ], {
+      exclude: ['.gitkeep'],
+      verbose: true,
+      dry: false,
+      watch: false,
+      allowExternal: false,
+    }),
+  ],
   resolve: {
     extensions: ['.js', '.jsx']
   },
@@ -22,8 +51,11 @@ var config = {
         include: APP_DIR,
         loader: 'babel-loader',
         query: {
-          presets: ['env', 'react']
-        }
+          presets: ['env', 'stage-2', 'react'],
+          plugins: [
+            'transform-object-rest-spread', 'transform-class-properties',
+          ],
+        },
       },
       {
         test: /\.html$/,
@@ -35,7 +67,14 @@ var config = {
         include: APP_DIR,
         loader: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: ['css-loader', 'sass-loader']
+          use: [
+            'css-loader',
+            {
+              loader: 'postcss-loader',
+              options: { plugins: [require('autoprefixer')({ browsers: ['last 2 versions'] })] },
+            },
+            'sass-loader'
+          ]
         })
       },
       {
@@ -44,12 +83,6 @@ var config = {
       }
     ]
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: APP_DIR + '/index.html'
-    }),
-    new ExtractTextPlugin('main.css'),
-  ]
 };
 
 module.exports = config;

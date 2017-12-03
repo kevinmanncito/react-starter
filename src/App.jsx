@@ -1,7 +1,6 @@
-import React from 'react';
-import Header from './components/Header.jsx';
+import React from 'react'
+import Header from './components/Header'
 
-import style from './sass/main.scss';
 
 class App extends React.Component {
   render () {
@@ -11,4 +10,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default App

@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Components render correctly Header renders correctly 1`] = `
+<header
+  className="header"
+>
+  <h1>
+    React
+  </h1>
+  <img
+    src="me.png"
+  />
+</header>
+`;
